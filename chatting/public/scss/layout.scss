@@ -1,0 +1,183 @@
+@import "vars";
+@import "mixin";
+@font-face {
+  font-family: "DOSGothic";
+  font-weight: normal;
+  src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_eight@1.0/DOSGothic.woff") format("woff");
+  font-style: normal;
+}
+* {
+  font-family: "DOSGothic", "Noto Sans KR", sans-serif;
+  box-sizing: border-box;
+}
+body {
+  font-family: "DOSGothic", "Noto Sans KR", sans-serif;
+  font-size: 16px;
+  color: #111;
+  background: #333;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.newWindow {
+  width: 500px;
+  height: 400px;
+  position: relative;
+  margin: 100px auto;
+  background-color: #999;
+  .menu {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 15px;
+    position: relative;
+    background-color: #eee;
+    button {
+      position: absolute;
+      padding: 0 3px;
+      border: solid 1px #111;
+      background-color: #eee;
+      &.close {
+        left: 0;
+        padding: 0;
+        .material-icons {
+          font-size: 12px;
+        }
+      }
+      &.info {
+        right: 0;
+      }
+    }
+    .pattern {
+      span {
+        display: block;
+        width: 500px;
+        height: 1px;
+        background-color: #111;
+        &:not(:last-child) {
+          margin-bottom: 2px;
+        }
+      }
+    }
+  }
+}
+.contents {
+  height: 100%;
+  position: relative;
+  padding: 10px;
+  .user {
+    background-color: #d9d9d9;
+    label {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      font-size: 14px;
+      .nick {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 80px;
+        margin-right: 10px;
+        color: #fff;
+        border: none;
+        background-color: #111;
+        outline: none;
+      }
+      input {
+        flex-grow: 1;
+        height: 30px;
+        padding: 0 10px;
+        border: none;
+        outline: none;
+      }
+    }
+  }
+  .chatBox {
+    height: calc(100% - 170px);
+    padding: 10px;
+    border-bottom: 10px solid #999;
+    background-color: #fff;
+    overflow-y: auto;
+    .chatList {
+      li {
+        display: flex;
+        flex-direction: column;
+        padding: 5px;
+        font-size: 14px;
+        .name {
+          color: rgb(0, 47, 255);
+          &:after {
+            margin-left: 3px;
+            content: ":";
+          }
+          &.blind {
+            display: none;
+          }
+        }
+        .msgBox {
+          display: flex;
+          align-items: flex-end;
+          .msg {
+            margin-right: 10px;
+          }
+          .time {
+            font-size: 12px;
+          }
+        }
+        &.me {
+          flex-direction: row-reverse;
+          .msgBox {
+            flex-direction: row-reverse;
+            .msg {
+              margin-right: 0;
+              margin-left: 10px;
+            }
+          }
+        }
+      }
+    }
+  }
+  .sendBox {
+    width: 100%;
+    height: 100px;
+    display: flex;
+    background-color: #d9d9d9;
+    label {
+      flex-basis: 85%;
+      textarea {
+        width: 100%;
+        height: 100%;
+        margin-right: 10px;
+        padding: 10px;
+        font-family: "Noto Sans KR";
+        border: none;
+        resize: none;
+        outline: none;
+
+        font-family: inherit;
+      }
+    }
+    .btnArea {
+      position: relative;
+      flex-basis: 15%;
+
+      .btnSend {
+        position: absolute;
+        top: 10px;
+        @include absCenter(true, false);
+        width: 50px;
+        padding: 3px 0;
+        font-size: 14px;
+        border: 1px solid #ddd;
+        outline: none;
+        background-color: #f0f0f0;
+        &.on {
+          color: #fff;
+          background-color: rgb(0, 47, 255);
+        }
+      }
+    }
+  }
+}

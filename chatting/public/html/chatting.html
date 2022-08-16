@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chatting</title>
+    <link rel="stylesheet" href="../css/reset.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link rel="stylesheet" href="../css/layout.css" />
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <div class="newWindow">
+      <div class="menu">
+        <button class="close"><span class="material-icons"> close </span></button>
+        <div class="pattern">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+        <button class="info">?</button>
+      </div>
+      <div class="contents">
+        <div class="user">
+          <label>
+            <span class="nick">닉네임</span>
+            <input type="text" placeholder="닉네임을 입력해 주세요" id="nickName" />
+          </label>
+        </div>
+        <div class="chatBox">
+          <ul class="chatList"></ul>
+        </div>
+        <div class="sendBox">
+          <label>
+            <textarea name=" " id="typeBox" cols="30" rows="10"></textarea>
+          </label>
+          <div class="btnArea"><button class="btnSend">전송</button></div>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script>
+    const socket = io();
+    // 서버에서 넘어오는 이벤트 받는 곳
+    $(".contents .sendBox #typeBox").on("keydown", function (e) {
+      if (e.keyCode === 13) {
+        if ($("#typeBox").val().trim() === "") {
+          e.preventDefault();
+        }
+      }
+    });
+    function chat() {
+      const chattingItem = { nickName: $("#nickName").val(), msg: $(".sendBox #typeBox").val() };
+      socket.emit("chatting", chattingItem);
+      $("#typeBox").val("");
+      $(".btnSend").removeClass("on");
+    }
+    $(".contents .sendBox .btnSend").on("click", function () {
+      chat();
+    });
+    $(".contents .sendBox #typeBox").on("keyup", function (e) {
+      if (e.keyCode === 13) {
+        if ($("#typeBox").val().trim() === "") {
+          $("#typeBox").val("");
+          return;
+        }
+        chat();
+      }
+      if ($("#typeBox").val().trim() !== "") {
+        $(".btnSend").addClass("on");
+      } else {
+        $(".btnSend").removeClass("on");
+      }
+    });
+
+    socket.on("chatting", (data) => {
+      const meOrOther = data.nickName === $("#nickName").val() ? "me" : "other";
+      $(".chatBox .chatList").append(`
+      <li class="${meOrOther}">
+              <span class="name">${data.nickName}</span>
+              <div class="msgBox">
+                <span class="msg">${data.msg}</span>
+                <span class="time">${data.time}</span>
+              </div>
+            </li>`);
+      $(".chatBox").scrollTop($(".chatBox")[0].scrollHeight);
+      // $(".chatBox").scrollTop(여기다가 숫자쓰면 거기로 내려감)
+      $(".chatList .me .name").addClass("blind");
+    });
+  </script>
+</html>
